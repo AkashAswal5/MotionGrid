@@ -14,6 +14,13 @@
     const documentStart = (select) => key(isMac ? "ArrowUp" : "Home", isMac ? { metaKey: true, shiftKey: select } : { ctrlKey: true, shiftKey: select });
     const documentEnd = (select) => key(isMac ? "ArrowDown" : "End", isMac ? { metaKey: true, shiftKey: select } : { ctrlKey: true, shiftKey: select });
     const afterSelection = (action) => window.setTimeout(action, 100);
+    const selectLine = (action) => {
+        key("Home");
+        window.setTimeout(() => {
+            key("End", { shiftKey: true });
+            window.setTimeout(action, 100);
+        }, 100);
+    };
     const undo = () => key("z", { [primary]: true });
     const controller = new window.MotionGridModal.ModalController({
         label: "EXCEL",
@@ -22,6 +29,7 @@
         documentEnd,
         undo,
         afterSelection,
+        selectLine,
         deleteSelection() { key("Delete"); },
         command(name) {
             const shortcut = { copy: "c", cut: "x", paste: "v", undo: "z", redo: "y", find: "f" }[name];

@@ -42,6 +42,14 @@
         window.setTimeout(action, 100);
     }
 
+    function selectLine(action) {
+        key("Home");
+        window.setTimeout(() => {
+            key("End", { shift: true });
+            window.setTimeout(action, 100);
+        }, 100);
+    }
+
     function start() {
         const iframe = document.querySelector(".docs-texteventtarget-iframe");
         if (!iframe?.contentDocument || !window.MotionGridModal) return false;
@@ -54,6 +62,7 @@
             documentEnd,
             undo,
             afterSelection,
+            selectLine,
             deleteSelection() { key("Backspace"); },
             insert(after) { if (after) key("ArrowRight"); },
             openLine(above) {

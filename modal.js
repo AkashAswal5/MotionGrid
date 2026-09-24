@@ -66,8 +66,8 @@
             const operation = this.operation;
             this.operation = "";
             if (key === operation) {
-                this.adapter.key("Home");
-                this.adapter.key("End", { shift: true });
+                this.adapter.selectLine(() => this.runOperation(operation));
+                return;
             } else if (key === "g") {
                 this.pendingGo = true;
                 this.operation = operation;
@@ -76,16 +76,13 @@
                 this.setMode("normal");
                 return;
             }
-            this.afterSelection(() => {
-                this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
-                if (operation === "c") this.enterInsert();
-                else this.setMode("normal");
-            });
+            this.afterSelection(() => this.runOperation(operation));
         }
 
-        selectLine() {
-            this.adapter.key("Home");
-            this.adapter.key("End", { shift: true });
+        runOperation(operation) {
+            this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
+            if (operation === "c") this.enterInsert();
+            else this.setMode("normal");
         }
 
         afterSelection(action) {
@@ -113,11 +110,7 @@
                     if (this.operation) {
                         const operation = this.operation;
                         this.operation = "";
-                        this.afterSelection(() => {
-                            this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
-                            if (operation === "c") this.enterInsert();
-                            else this.setMode("normal");
-                        });
+                        this.afterSelection(() => this.runOperation(operation));
                     }
                 } else {
                     this.operation = "";
@@ -138,19 +131,17 @@
                 case "o": this.adapter.openLine(false); this.setMode("insert"); break;
                 case "O": this.adapter.openLine(true); this.setMode("insert"); break;
                 case "v": this.setMode("visual"); this.adapter.key("ArrowRight", { shift: true }); break;
-                case "V": this.selectLine(); this.setMode("visual"); break;
+                case "V": this.adapter.selectLine(() => this.setMode("visual")); break;
                 case "d": case "c": case "y": this.operation = key; break;
                 case "D":
                     this.adapter.key("End", { shift: true });
                     this.afterSelection(() => this.adapter.deleteSelection());
                     break;
                 case "R":
-                    this.selectLine();
-                    this.afterSelection(() => this.adapter.deleteSelection());
+                    this.adapter.selectLine(() => this.adapter.deleteSelection());
                     break;
                 case "Y":
-                    this.selectLine();
-                    this.afterSelection(() => this.adapter.command("copy"));
+                    this.adapter.selectLine(() => this.adapter.command("copy"));
                     break;
                 case "p": case "P": this.adapter.command("paste"); break;
                 case "x": this.adapter.key("Delete"); break;
@@ -165,9 +156,9 @@
         handleVisual(key) {
             if (this.motion(key, true)) return;
             switch (key) {
-                case "d": case "D": this.adapter.command("cut"); this.setMode("normal"); break;
-                case "c": this.adapter.command("cut"); this.enterInsert(); break;
-                case "y": this.adapter.command("copy"); this.setMode("normal"); break;
+                case "d": case "D": this.afterSelection(() => { this.adapter.command("cut"); this.setMode("normal"); }); break;
+                case "c": this.afterSelection(() => { this.adapter.command("cut"); this.enterInsert(); }); break;
+                case "y": this.afterSelection(() => { this.adapter.command("copy"); this.setMode("normal"); }); break;
                 case "p": case "P": this.adapter.command("paste"); this.setMode("normal"); break;
             }
         }
