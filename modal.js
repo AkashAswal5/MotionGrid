@@ -76,14 +76,20 @@
                 this.setMode("normal");
                 return;
             }
-            this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
-            if (operation === "c") this.enterInsert();
-            else this.setMode("normal");
+            this.afterSelection(() => {
+                this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
+                if (operation === "c") this.enterInsert();
+                else this.setMode("normal");
+            });
         }
 
         selectLine() {
             this.adapter.key("Home");
             this.adapter.key("End", { shift: true });
+        }
+
+        afterSelection(action) {
+            this.adapter.afterSelection(action);
         }
 
         goToDocumentStart(select = false) {
@@ -107,9 +113,11 @@
                     if (this.operation) {
                         const operation = this.operation;
                         this.operation = "";
-                        this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
-                        if (operation === "c") this.enterInsert();
-                        else this.setMode("normal");
+                        this.afterSelection(() => {
+                            this.adapter.command(operation === "d" || operation === "c" ? "cut" : "copy");
+                            if (operation === "c") this.enterInsert();
+                            else this.setMode("normal");
+                        });
                     }
                 } else {
                     this.operation = "";
@@ -134,9 +142,16 @@
                 case "d": case "c": case "y": this.operation = key; break;
                 case "D":
                     this.adapter.key("End", { shift: true });
-                    this.adapter.deleteSelection();
+                    this.afterSelection(() => this.adapter.deleteSelection());
                     break;
-                case "Y": this.selectLine(); this.adapter.command("copy"); break;
+                case "R":
+                    this.selectLine();
+                    this.afterSelection(() => this.adapter.deleteSelection());
+                    break;
+                case "Y":
+                    this.selectLine();
+                    this.afterSelection(() => this.adapter.command("copy"));
+                    break;
                 case "p": this.adapter.command("paste"); break;
                 case "x": this.adapter.key("Delete"); break;
                 case "s": this.adapter.key("Delete"); this.enterInsert(); break;

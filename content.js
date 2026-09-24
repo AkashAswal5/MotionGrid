@@ -34,6 +34,10 @@
         item?.click();
     }
 
+    function afterSelection(action) {
+        window.setTimeout(action, 50);
+    }
+
     function start() {
         const iframe = document.querySelector(".docs-texteventtarget-iframe");
         if (!iframe?.contentDocument || !window.MotionGridModal) return false;
@@ -44,6 +48,7 @@
             command,
             documentStart,
             documentEnd,
+            afterSelection,
             deleteSelection() { key("Backspace"); },
             insert(after) { if (after) key("ArrowRight"); },
             openLine(above) {
