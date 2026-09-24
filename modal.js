@@ -101,12 +101,6 @@
             this.setMode("insert");
         }
 
-        openFind() {
-            this.findMode = true;
-            this.adapter.command("find");
-            this.render();
-        }
-
         handleNormal(key) {
             if (/^[1-9]$/.test(key)) {
                 this.count += key;
@@ -153,7 +147,6 @@
                     this.adapter.selectLine(() => this.adapter.command("copy"));
                     break;
                 case "p": case "P": this.adapter.command("paste"); break;
-                case "f": this.openFind(); break;
                 case "x": this.adapter.key("Delete"); break;
                 case "s": this.adapter.key("Delete"); this.enterInsert(); break;
                 case "J": this.adapter.key("End"); this.adapter.key("Delete"); break;
