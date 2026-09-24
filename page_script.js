@@ -4,24 +4,41 @@
     function keyCode(key) {
         return keyCodes[key] || (key.length === 1 ? key.toUpperCase().charCodeAt(0) : 0);
     }
+
+    function dispatchKey(type, target, key, modifiers) {
+        const code = keyCode(key);
+        const event = document.createEvent("KeyboardEvent");
+        event.initKeyboardEvent(
+            type,
+            true,
+            true,
+            window,
+            "",
+            false,
+            !!modifiers.control,
+            !!modifiers.alt,
+            !!modifiers.shift,
+            !!modifiers.meta,
+            code,
+            code,
+        );
+        Object.defineProperties(event, {
+            keyCode: { get: () => code },
+            which: { get: () => code },
+            ctrlKey: { get: () => !!modifiers.control },
+            altKey: { get: () => !!modifiers.alt },
+            shiftKey: { get: () => !!modifiers.shift },
+            metaKey: { get: () => !!modifiers.meta },
+        });
+        target.dispatchEvent(event);
+    }
+
     window.addEventListener("motiongrid-docs-key", (event) => {
         const { key, modifiers } = event.detail;
         const editorDocument = document.querySelector(".docs-texteventtarget-iframe")?.contentDocument;
-        const target = editorDocument?.activeElement && editorDocument.activeElement !== editorDocument.body
-            ? editorDocument.activeElement
-            : editorDocument?.querySelector("textarea, [contenteditable='true']");
+        const target = editorDocument?.querySelector("textarea") || editorDocument?.activeElement;
         if (!target) return;
-        const keyboardModifiers = {
-            shiftKey: !!modifiers.shift,
-            ctrlKey: !!modifiers.control,
-            altKey: !!modifiers.alt,
-            metaKey: !!modifiers.meta,
-        };
-        for (const type of ["keydown", "keyup"]) {
-            const keyboardEvent = new KeyboardEvent(type, { key, bubbles: true, cancelable: true, ...keyboardModifiers });
-            Object.defineProperty(keyboardEvent, "keyCode", { get: () => keyCode(key) });
-            Object.defineProperty(keyboardEvent, "which", { get: () => keyCode(key) });
-            target.dispatchEvent(keyboardEvent);
-        }
+        dispatchKey("keydown", target, key, modifiers);
+        dispatchKey("keyup", target, key, modifiers);
     });
 })();
