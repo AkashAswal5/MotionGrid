@@ -15,6 +15,16 @@
         window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { key: keyName, modifiers } }));
     }
 
+    const isMac = /Mac/.test(navigator.platform || navigator.userAgent);
+
+    function documentStart(select) {
+        key(isMac ? "ArrowUp" : "Home", isMac ? { meta: true, shift: select } : { control: true, shift: select });
+    }
+
+    function documentEnd(select) {
+        key(isMac ? "ArrowDown" : "End", isMac ? { meta: true, shift: select } : { control: true, shift: select });
+    }
+
     function command(name) {
         const caption = menuItems[name];
         const editMenu = [...document.querySelectorAll(".menu-button")].find((element) => element.innerText.trim() === "Edit");
@@ -32,6 +42,8 @@
             label: "DOCS",
             key,
             command,
+            documentStart,
+            documentEnd,
             deleteSelection() { key("Backspace"); },
             insert(after) { if (after) key("ArrowRight"); },
             openLine(above) {

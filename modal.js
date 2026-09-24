@@ -54,7 +54,7 @@
                 case "e": move("ArrowRight", { [primary]: true }); break;
                 case "0": case "^": case "_": move("Home"); break;
                 case "$": move("End"); break;
-                case "G": move("End", { [primary]: true }); break;
+                case "G": this.adapter.documentEnd(select); break;
                 case "{": move("ArrowUp", { [primary]: true }); break;
                 case "}": move("ArrowDown", { [primary]: true }); break;
                 default: return false;
@@ -86,6 +86,10 @@
             this.adapter.key("End", { shift: true });
         }
 
+        goToDocumentStart(select = false) {
+            this.adapter.documentStart(select);
+        }
+
         enterInsert(after = false) {
             this.adapter.insert(after);
             this.setMode("insert");
@@ -99,7 +103,7 @@
             if (this.pendingGo) {
                 this.pendingGo = false;
                 if (key === "g") {
-                    this.adapter.key("Home", { [primary]: true, shift: !!this.operation });
+                    this.goToDocumentStart(!!this.operation);
                     if (this.operation) {
                         const operation = this.operation;
                         this.operation = "";
@@ -118,7 +122,7 @@
             }
             if (this.motion(key)) return;
             switch (key) {
-                case "g": this.pendingGo = true; break;
+                case "g": this.pendingGo = true; this.render(); break;
                 case "i": this.enterInsert(); break;
                 case "a": this.enterInsert(true); break;
                 case "I": this.adapter.key("Home"); this.enterInsert(); break;

@@ -11,9 +11,13 @@
 
     const isMac = /Mac/.test(navigator.platform || navigator.userAgent);
     const primary = isMac ? "metaKey" : "ctrlKey";
+    const documentStart = (select) => key(isMac ? "ArrowUp" : "Home", isMac ? { metaKey: true, shiftKey: select } : { ctrlKey: true, shiftKey: select });
+    const documentEnd = (select) => key(isMac ? "ArrowDown" : "End", isMac ? { metaKey: true, shiftKey: select } : { ctrlKey: true, shiftKey: select });
     const controller = new window.MotionGridModal.ModalController({
         label: "EXCEL",
         key,
+        documentStart,
+        documentEnd,
         deleteSelection() { key("Delete"); },
         command(name) {
             const shortcut = { copy: "c", cut: "x", paste: "v", undo: "z", redo: "y", find: "f" }[name];
