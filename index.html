@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MotionGrid</title>
+    <style>
+        :root { color-scheme: dark; --ink:#eaf0f5; --muted:#9baabd; --line:#2a3746; --panel:#16202b; --blue:#6eabff; --green:#5ee0ab; }
+        * { box-sizing:border-box; }
+        body { width:390px; margin:0; padding:18px; background:#0d141d; color:var(--ink); font:13px/1.45 Inter,ui-sans-serif,system-ui,sans-serif; }
+        header { display:flex; align-items:center; gap:11px; margin-bottom:18px; }
+        .mark { display:grid; place-items:center; width:32px; height:32px; border:1px solid #466b94; border-radius:9px; background:linear-gradient(145deg,#173552,#102338); color:#8fc1ff; font:700 16px ui-monospace,monospace; }
+        h1 { margin:0; font-size:16px; letter-spacing:-.02em; }
+        .tag { margin-left:auto; border:1px solid #2d4c42; border-radius:999px; padding:3px 8px; color:var(--green); font:700 10px ui-monospace,monospace; letter-spacing:.08em; }
+        .intro { margin:0 0 16px; color:var(--muted); }
+        .apps { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+        .app { border:1px solid var(--line); border-radius:9px; padding:10px; background:var(--panel); }
+        .app strong { display:block; margin-bottom:3px; font-size:12px; }
+        .app span { color:var(--muted); font-size:11px; }
+        .docs strong { color:var(--blue); } .excel strong { color:var(--green); }
+        section { margin-top:15px; }
+        h2 { margin:0 0 7px; color:#c6d4e3; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+        .grid { display:grid; grid-template-columns:auto 1fr; gap:5px 10px; }
+        kbd { min-width:28px; border:1px solid #3a4a5a; border-bottom-color:#56697c; border-radius:4px; padding:1px 5px; background:#1b2835; color:#f6f9fc; font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace; text-align:center; white-space:nowrap; }
+        .keys { display:flex; flex-wrap:wrap; gap:3px; }
+        .desc { color:var(--muted); }
+        footer { margin-top:17px; padding-top:11px; border-top:1px solid var(--line); color:#718195; font-size:11px; }
+    </style>
+</head>
+<body>
+    <header><div class="mark">M</div><h1>MotionGrid</h1><span class="tag">MODAL</span></header>
+    <p class="intro">Neovim-style editing for your browser workspace. Press <kbd>Esc</kbd> to return to normal mode.</p>
+    <div class="apps"><div class="app docs"><strong>Google Docs</strong><span>Text navigation and editing</span></div><div class="app excel"><strong>Excel Web</strong><span>Cell navigation and editing</span></div></div>
+    <section><h2>Move</h2><div class="grid">
+        <div class="keys"><kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd></div><div class="desc">left, down, up, right</div>
+        <div class="keys"><kbd>w</kbd><kbd>b</kbd><kbd>f</kbd></div><div class="desc">forward, back, forward word motion</div>
+        <div class="keys"><kbd>0</kbd><kbd>$</kbd></div><div class="desc">line or cell start/end</div>
+        <div class="keys"><kbd>gg</kbd><kbd>G</kbd></div><div class="desc">document or sheet start/end</div>
+        <div class="keys"><kbd>3j</kbd></div><div class="desc">repeat a motion with a count</div>
+    </div></section>
+    <section><h2>Modes and Editing</h2><div class="grid">
+        <div class="keys"><kbd>i</kbd><kbd>a</kbd><kbd>I</kbd><kbd>A</kbd></div><div class="desc">insert at cursor, after, start, or end</div>
+        <div class="keys"><kbd>v</kbd><kbd>V</kbd></div><div class="desc">character or line selection</div>
+        <div class="keys"><kbd>d</kbd><kbd>c</kbd><kbd>y</kbd> + motion</div><div class="desc">delete, change, or copy</div>
+        <div class="keys"><kbd>D</kbd><kbd>Y</kbd><kbd>p</kbd></div><div class="desc">to end, copy to end, paste</div>
+    </div></section>
+    <footer>MotionGrid works locally in supported editors. It does not read, store, or send document data.</footer>
+</body>
+</html>
