@@ -35,7 +35,7 @@
     }
 
     function afterSelection(action) {
-        window.setTimeout(action, 50);
+        window.setTimeout(action, 100);
     }
 
     function start() {

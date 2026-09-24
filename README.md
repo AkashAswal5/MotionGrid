@@ -35,7 +35,7 @@ Disable other keyboard-navigation extensions on these sites to prevent keybindin
 
 - `d`, `c`, `y` + motion - Delete/cut, change, or copy through a motion, including `dw`, `db`, `dd`, and `yy`
 - `D`, `Y` - Delete or copy from the cursor to line/range end
-- `p` - Paste
+- `p`, `P` - Paste
 - `x` - Delete forward
 - `s` - Delete forward and insert
 - `u`, `r` - Undo and redo
