@@ -25,6 +25,10 @@
         key(isMac ? "ArrowDown" : "End", isMac ? { meta: true, shift: select } : { control: true, shift: select });
     }
 
+    function undo() {
+        key("z", isMac ? { meta: true } : { control: true });
+    }
+
     function command(name) {
         const caption = menuItems[name];
         const editMenu = [...document.querySelectorAll(".menu-button")].find((element) => element.innerText.trim() === "Edit");
@@ -48,6 +52,7 @@
             command,
             documentStart,
             documentEnd,
+            undo,
             afterSelection,
             deleteSelection() { key("Backspace"); },
             insert(after) { if (after) key("ArrowRight"); },

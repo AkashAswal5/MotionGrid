@@ -156,7 +156,7 @@
                 case "x": this.adapter.key("Delete"); break;
                 case "s": this.adapter.key("Delete"); this.enterInsert(); break;
                 case "J": this.adapter.key("End"); this.adapter.key("Delete"); break;
-                case "u": this.adapter.command("undo"); break;
+                case "u": this.adapter.undo(); break;
                 case "r": this.adapter.command("redo"); break;
                 case "/": this.adapter.command("find"); break;
             }

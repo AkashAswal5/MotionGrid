@@ -14,11 +14,13 @@
     const documentStart = (select) => key(isMac ? "ArrowUp" : "Home", isMac ? { metaKey: true, shiftKey: select } : { ctrlKey: true, shiftKey: select });
     const documentEnd = (select) => key(isMac ? "ArrowDown" : "End", isMac ? { metaKey: true, shiftKey: select } : { ctrlKey: true, shiftKey: select });
     const afterSelection = (action) => window.setTimeout(action, 100);
+    const undo = () => key("z", { [primary]: true });
     const controller = new window.MotionGridModal.ModalController({
         label: "EXCEL",
         key,
         documentStart,
         documentEnd,
+        undo,
         afterSelection,
         deleteSelection() { key("Delete"); },
         command(name) {
