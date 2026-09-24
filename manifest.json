@@ -1,0 +1,63 @@
+{
+    "manifest_version": 3,
+    "name": "MotionGrid",
+    "description": "Neovim-style keyboard shortcuts for Google Docs and Excel for the web",
+    "version": "2.1.0",
+    "icons": {
+        "16": "icons/officer.png",
+        "32": "icons/officer.png",
+        "48": "icons/officer.png",
+        "128": "icons/officer.png"
+    },
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": {
+            "16": "icons/officer.png",
+            "32": "icons/officer.png",
+            "48": "icons/officer.png",
+            "128": "icons/officer.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "modal.js",
+                "content.js"
+            ],
+            "matches": [
+                "https://docs.google.com/*"
+            ]
+        },
+        {
+            "js": [
+                "modal.js",
+                "excel.js"
+            ],
+            "matches": [
+                "https://*.office.com/*",
+                "https://*.officeapps.live.com/*",
+                "https://excel.cloud.microsoft/*"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "page_script.js"
+            ],
+            "matches": [
+                "https://docs.google.com/*"
+            ]
+        },
+        {
+            "resources": [
+                "excel_page_script.js"
+            ],
+            "matches": [
+                "https://*.office.com/*",
+                "https://*.officeapps.live.com/*",
+                "https://excel.cloud.microsoft/*"
+            ]
+        }
+    ]
+}
