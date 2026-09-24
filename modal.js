@@ -49,7 +49,7 @@
                 case "j": move("ArrowDown"); break;
                 case "k": move("ArrowUp"); break;
                 case "l": move("ArrowRight"); break;
-                case "w": case "f": this.repeat(() => this.adapter.wordForward(select)); break;
+                case "w": this.repeat(() => this.adapter.wordForward(select)); break;
                 case "b": this.repeat(() => this.adapter.wordBackward(select)); break;
                 case "e": this.repeat(() => this.adapter.wordForward(select)); break;
                 case "0": case "^": case "_": move("Home"); break;
@@ -144,6 +144,7 @@
                     this.adapter.selectLine(() => this.adapter.command("copy"));
                     break;
                 case "p": case "P": this.adapter.command("paste"); break;
+                case "f": this.adapter.command("find"); break;
                 case "x": this.adapter.key("Delete"); break;
                 case "s": this.adapter.key("Delete"); this.enterInsert(); break;
                 case "J": this.adapter.key("End"); this.adapter.key("Delete"); break;
