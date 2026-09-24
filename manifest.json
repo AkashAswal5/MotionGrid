@@ -21,6 +21,16 @@
     "content_scripts": [
         {
             "js": [
+                "page_script.js"
+            ],
+            "matches": [
+                "https://docs.google.com/*"
+            ],
+            "world": "MAIN",
+            "run_at": "document_start"
+        },
+        {
+            "js": [
                 "modal.js",
                 "content.js"
             ],
@@ -30,28 +40,20 @@
         },
         {
             "js": [
-                "modal.js",
-                "excel.js"
+                "excel_page_script.js"
             ],
             "matches": [
                 "https://*.office.com/*",
                 "https://*.officeapps.live.com/*",
                 "https://excel.cloud.microsoft/*"
-            ]
-        }
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "page_script.js"
             ],
-            "matches": [
-                "https://docs.google.com/*"
-            ]
+            "world": "MAIN",
+            "run_at": "document_start"
         },
         {
-            "resources": [
-                "excel_page_script.js"
+            "js": [
+                "modal.js",
+                "excel.js"
             ],
             "matches": [
                 "https://*.office.com/*",

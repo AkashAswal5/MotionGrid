@@ -1,10 +1,5 @@
 (() => {
     const EVENT_NAME = "motiongrid-excel-key";
-    const script = document.createElement("script");
-    script.src = chrome.runtime.getURL("excel_page_script.js");
-    document.documentElement.append(script);
-    script.remove();
-
     function key(keyName, modifiers = {}) {
         window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { key: keyName, modifiers } }));
     }

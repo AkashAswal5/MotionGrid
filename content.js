@@ -4,13 +4,6 @@
         copy: "Copy", cut: "Cut", paste: "Paste", undo: "Undo", redo: "Redo", find: "Find",
     };
 
-    function injectBridge() {
-        const script = document.createElement("script");
-        script.src = chrome.runtime.getURL("page_script.js");
-        document.documentElement.append(script);
-        script.remove();
-    }
-
     function key(keyName, modifiers = {}) {
         window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { key: keyName, modifiers } }));
     }
@@ -65,7 +58,6 @@
     function start() {
         const iframe = document.querySelector(".docs-texteventtarget-iframe");
         if (!iframe?.contentDocument || !window.MotionGridModal) return false;
-        injectBridge();
         const controller = new window.MotionGridModal.ModalController({
             label: "DOCS",
             key,
