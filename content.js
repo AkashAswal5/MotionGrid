@@ -32,6 +32,7 @@
             label: "DOCS",
             key,
             command,
+            deleteSelection() { key("Backspace"); },
             insert(after) { if (after) key("ArrowRight"); },
             openLine(above) {
                 key(above ? "Home" : "End");

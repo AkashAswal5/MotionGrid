@@ -128,7 +128,10 @@
                 case "v": this.setMode("visual"); this.adapter.key("ArrowRight", { shift: true }); break;
                 case "V": this.selectLine(); this.setMode("visual"); break;
                 case "d": case "c": case "y": this.operation = key; break;
-                case "D": this.adapter.key("End", { shift: true }); this.adapter.command("cut"); break;
+                case "D":
+                    this.adapter.key("End", { shift: true });
+                    this.adapter.deleteSelection();
+                    break;
                 case "Y": this.selectLine(); this.adapter.command("copy"); break;
                 case "p": this.adapter.command("paste"); break;
                 case "x": this.adapter.key("Delete"); break;

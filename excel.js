@@ -14,6 +14,7 @@
     const controller = new window.MotionGridModal.ModalController({
         label: "EXCEL",
         key,
+        deleteSelection() { key("Delete"); },
         command(name) {
             const shortcut = { copy: "c", cut: "x", paste: "v", undo: "z", redo: "y", find: "f" }[name];
             if (shortcut) key(shortcut, { [primary]: true });
