@@ -49,9 +49,9 @@
                 case "j": move("ArrowDown"); break;
                 case "k": move("ArrowUp"); break;
                 case "l": move("ArrowRight"); break;
-                case "w": case "f": move("ArrowRight", { [primary]: true }); break;
-                case "b": move("ArrowLeft", { [primary]: true }); break;
-                case "e": move("ArrowRight", { [primary]: true }); break;
+                case "w": case "f": this.repeat(() => this.adapter.wordForward(select)); break;
+                case "b": this.repeat(() => this.adapter.wordBackward(select)); break;
+                case "e": this.repeat(() => this.adapter.wordForward(select)); break;
                 case "0": case "^": case "_": move("Home"); break;
                 case "$": move("End"); break;
                 case "G": this.adapter.documentEnd(select); break;

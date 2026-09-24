@@ -25,6 +25,14 @@
         key(isMac ? "ArrowDown" : "End", isMac ? { meta: true, shift: select } : { control: true, shift: select });
     }
 
+    function wordForward(select) {
+        key("ArrowRight", isMac ? { alt: true, shift: select } : { control: true, shift: select });
+    }
+
+    function wordBackward(select) {
+        key("ArrowLeft", isMac ? { alt: true, shift: select } : { control: true, shift: select });
+    }
+
     function undo() {
         key("z", isMac ? { meta: true } : { control: true });
     }
@@ -60,6 +68,8 @@
             command,
             documentStart,
             documentEnd,
+            wordForward,
+            wordBackward,
             undo,
             afterSelection,
             selectLine,
