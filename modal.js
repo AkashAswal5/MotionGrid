@@ -9,7 +9,6 @@
             this.count = "";
             this.operation = "";
             this.pendingGo = false;
-            this.pendingFindCharacter = false;
             this.temporaryNormal = false;
             this.indicator = this.createIndicator();
             this.render();
@@ -24,9 +23,8 @@
         }
 
         render() {
-            const state = this.pendingFindCharacter ? "FIND CHAR" : this.mode.toUpperCase();
-            this.indicator.textContent = `${this.adapter.label} / ${state}`;
-            this.indicator.style.background = this.pendingFindCharacter ? "#315b8f" : this.mode === "insert" ? "#176b52" : this.mode === "visual" ? "#8a5a13" : "#18212b";
+            this.indicator.textContent = `${this.adapter.label} / ${this.mode.toUpperCase()}`;
+            this.indicator.style.background = this.mode === "insert" ? "#176b52" : this.mode === "visual" ? "#8a5a13" : "#18212b";
         }
 
         setMode(mode) {
@@ -34,7 +32,6 @@
             this.count = "";
             this.operation = "";
             this.pendingGo = false;
-            this.pendingFindCharacter = false;
             this.render();
         }
 
@@ -120,12 +117,6 @@
                 }
                 return;
             }
-            if (this.pendingFindCharacter) {
-                this.pendingFindCharacter = false;
-                this.adapter.findCharacter(key);
-                this.render();
-                return;
-            }
             if (this.operation) {
                 this.applyOperation(key);
                 return;
@@ -153,7 +144,6 @@
                     this.adapter.selectLine(() => this.adapter.command("copy"));
                     break;
                 case "p": case "P": this.adapter.command("paste"); break;
-                case "f": this.pendingFindCharacter = true; this.render(); break;
                 case "x": this.adapter.key("Delete"); break;
                 case "s": this.adapter.key("Delete"); this.enterInsert(); break;
                 case "J": this.adapter.key("End"); this.adapter.key("Delete"); break;
@@ -178,11 +168,6 @@
             if (!event.isTrusted) return;
             if (event.defaultPrevented || event.altKey || event.metaKey || (event.ctrlKey && event.key.toLowerCase() !== "o")) return;
             if (event.key === "Escape") {
-                if (this.pendingFindCharacter) {
-                    this.pendingFindCharacter = false;
-                    this.render();
-                    return;
-                }
                 if (this.mode !== "insert") event.preventDefault();
                 this.setMode("normal");
                 return;

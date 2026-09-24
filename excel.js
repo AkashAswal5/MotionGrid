@@ -30,11 +30,6 @@
         afterSelection,
         selectLine,
         deleteSelection() { key("Delete"); },
-        findCharacter(character) {
-            key("f", { [primary]: true });
-            window.setTimeout(() => key(character), 150);
-            window.setTimeout(() => key("Enter"), 200);
-        },
         command(name) {
             const shortcut = { copy: "c", cut: "x", paste: "v", undo: "z", redo: "y", find: "f" }[name];
             if (shortcut) key(shortcut, { [primary]: true });

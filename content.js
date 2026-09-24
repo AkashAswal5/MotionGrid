@@ -39,18 +39,6 @@
         item?.click();
     }
 
-    function findCharacter(character) {
-        command("find");
-        window.setTimeout(() => {
-            const input = document.querySelector("[role='dialog'] input, .docs-findbar input");
-            if (!input) return;
-            input.focus();
-            input.value = character;
-            input.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText", data: character }));
-            input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-        }, 150);
-    }
-
     function afterSelection(action) {
         window.setTimeout(action, 100);
     }
@@ -70,7 +58,6 @@
             label: "DOCS",
             key,
             command,
-            findCharacter,
             documentStart,
             documentEnd,
             wordForward,

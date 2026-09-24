@@ -16,7 +16,7 @@ Disable other keyboard-navigation extensions on these sites to prevent keybindin
 - `h`, `j`, `k`, `l` - Left, down, up, right
 - `w`, `e` - Move forward one word or cell boundary
 - `b` - Move back one word or cell boundary
-- `f{character}` - Best-effort character search using the editor's native Find UI; it is not limited to the active line
+- `f{character}` - Not supported: Google Docs and Excel web do not expose active-line text and cursor positions required for reliable line-local character motion
 - `{`, `}` - Previous/next paragraph or cell region
 - `0`, `^`, `_` - Start of line or active cell range
 - `$` - End of line or active cell range
