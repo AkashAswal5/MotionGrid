@@ -31,16 +31,24 @@
     }
 
     function command(name) {
-        if (name === "find") {
-            key("f", isMac ? { meta: true } : { control: true });
-            return;
-        }
         const caption = menuItems[name];
         const editMenu = [...document.querySelectorAll(".menu-button")].find((element) => element.innerText.trim() === "Edit");
         if (!caption || !editMenu) return;
         editMenu.click();
         const item = [...document.querySelectorAll(".goog-menuitem")].find((element) => element.innerText.trim().startsWith(caption));
         item?.click();
+    }
+
+    function findCharacter(character) {
+        command("find");
+        window.setTimeout(() => {
+            const input = document.querySelector("[role='dialog'] input, .docs-findbar input");
+            if (!input) return;
+            input.focus();
+            input.value = character;
+            input.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText", data: character }));
+            input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        }, 150);
     }
 
     function afterSelection(action) {
@@ -62,6 +70,7 @@
             label: "DOCS",
             key,
             command,
+            findCharacter,
             documentStart,
             documentEnd,
             wordForward,
