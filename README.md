@@ -16,7 +16,7 @@ Disable other keyboard-navigation extensions on these sites to prevent keybindin
 - `h`, `j`, `k`, `l` - Left, down, up, right
 - `w`, `e` - Move forward one word or cell boundary
 - `b` - Move back one word or cell boundary
-- `f` - Open the editor's native Find interface
+- `f` then text - Open the native Find interface and search the document/workbook
 - `{`, `}` - Previous/next paragraph or cell region
 - `0`, `^`, `_` - Start of line or active cell range
 - `$` - End of line or active cell range

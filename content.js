@@ -38,6 +38,10 @@
     }
 
     function command(name) {
+        if (name === "find") {
+            key("f", isMac ? { meta: true } : { control: true });
+            return;
+        }
         const caption = menuItems[name];
         const editMenu = [...document.querySelectorAll(".menu-button")].find((element) => element.innerText.trim() === "Edit");
         if (!caption || !editMenu) return;
