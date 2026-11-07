@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "MotionGrid",
     "description": "Neovim-style keyboard shortcuts for Google Docs and Excel for the web",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "icons": {
         "16": "icons/officer.png",
         "32": "icons/officer.png",

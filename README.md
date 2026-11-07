@@ -34,6 +34,7 @@ MotionGrid brings familiar modal editing keybindings to browser-based editors by
 | `$` | End of line or active cell range |
 | `gg` | Document or worksheet start |
 | `G` | Document or worksheet end |
+| `Ctrl+d` / `Ctrl+u` | Scroll half a page down / up |
 | `{n}` + motion | Repeat a motion (e.g. `5j`) |
 
 ### Modes
@@ -43,7 +44,8 @@ MotionGrid brings familiar modal editing keybindings to browser-based editors by
 | `i` / `a` | Insert at cursor / after cursor |
 | `I` / `A` | Insert at start / end of line |
 | `v` / `V` | Character-wise / line-wise visual selection |
-| `Esc` | Return to normal mode |
+| `Esc` / `Ctrl+[` | Return to normal mode |
+| `jk` / `jj` | Return to normal mode from insert (the first `j` is removed automatically) |
 | `Ctrl+o` | Execute one normal-mode command from insert mode |
 
 ### Operators and Editing
@@ -61,11 +63,14 @@ MotionGrid brings familiar modal editing keybindings to browser-based editors by
 | `o` / `O` | Open a new line below / above |
 | `J` | Join with the next line, where supported |
 | `/` | Search the document or workbook with the editor's native Find |
+| `n` / `N` | Repeat the last search forward / backward via native Find |
 
 ### Behavior Notes
 
 - Yank and paste operate on the **system clipboard**; named and numbered registers are not implemented.
 - In Excel, `i` / `a` enters cell-edit mode, and `dd` / `yy` act on the active cell's contents rather than the entire row.
+- `n` / `N` reopen the editor's native Find dialog and jump to the next (or previous) match. In Google Docs, `N` may behave like `n` if the dialog does not accept a reversed-direction Enter.
+- The mode indicator shows any pending sequence — counts, operators, and `g` — so an in-progress command such as `3dg` is always visible.
 
 ## Installation
 

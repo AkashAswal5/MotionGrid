@@ -1,5 +1,5 @@
 (() => {
-    const keyCodes = { Backspace: 8, Enter: 13, Escape: 27, End: 35, Home: 36, ArrowLeft: 37, ArrowUp: 38, ArrowRight: 39, ArrowDown: 40, Delete: 46, F2: 113 };
+    const keyCodes = { Backspace: 8, Enter: 13, Escape: 27, PageUp: 33, PageDown: 34, End: 35, Home: 36, ArrowLeft: 37, ArrowUp: 38, ArrowRight: 39, ArrowDown: 40, Delete: 46, F2: 113 };
 
     function keyCode(key) {
         return keyCodes[key] || (key.length === 1 ? key.toUpperCase().charCodeAt(0) : 0);
@@ -34,9 +34,11 @@
     }
 
     window.addEventListener("motiongrid-docs-key", (event) => {
-        const { key, modifiers } = event.detail;
+        const { key, modifiers, selector } = event.detail;
         const editorDocument = document.querySelector(".docs-texteventtarget-iframe")?.contentDocument;
-        const target = editorDocument?.querySelector("textarea") || editorDocument?.activeElement;
+        const target = (selector && document.querySelector(selector))
+            || editorDocument?.querySelector("textarea")
+            || editorDocument?.activeElement;
         if (!target) return;
         dispatchKey("keydown", target, key, modifiers);
         dispatchKey("keyup", target, key, modifiers);

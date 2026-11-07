@@ -4,8 +4,13 @@
         copy: "Copy", cut: "Cut", paste: "Paste", undo: "Undo", redo: "Redo", find: "Find",
     };
 
-    function key(keyName, modifiers = {}) {
-        window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { key: keyName, modifiers } }));
+    function key(keyName, modifiers = {}, selector) {
+        window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { key: keyName, modifiers, selector } }));
+    }
+
+    function findNext(backward) {
+        command("find");
+        window.setTimeout(() => key("Enter", { shift: backward }, ".docs-findinput input, .docs-dialog input"), 350);
     }
 
     const isMac = /Mac/.test(navigator.platform || navigator.userAgent);
@@ -63,6 +68,7 @@
             wordForward,
             wordBackward,
             undo,
+            findNext,
             afterSelection,
             selectLine,
             deleteSelection() { key("Backspace"); },

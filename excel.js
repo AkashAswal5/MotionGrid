@@ -27,6 +27,10 @@
         wordForward,
         wordBackward,
         undo,
+        findNext(backward) {
+            key("f", { [primary]: true });
+            window.setTimeout(() => key("Enter", { shiftKey: backward }), 350);
+        },
         afterSelection,
         selectLine,
         deleteSelection() { key("Delete"); },
