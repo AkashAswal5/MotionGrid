@@ -1,65 +1,96 @@
 # MotionGrid
 
-MotionGrid is a local Chrome extension for modal, Neovim-style editing in Google Docs and Excel for the web. It translates commands to each editor's native keyboard behavior; it does not use document APIs or transmit document data.
+Modal, Neovim-style editing for **Google Docs** and **Excel for the web**, delivered as a local Chrome extension.
 
-Disable other keyboard-navigation extensions on these sites to prevent keybinding conflicts.
+MotionGrid brings familiar modal editing keybindings to browser-based editors by translating Vim commands into each editor's native keyboard behavior. It does not use document APIs, inject content into the page, or transmit any document data — every command is dispatched as a local, native editor event.
+
+## Features
+
+- Modal editing with Normal, Insert, and Visual modes, plus an on-screen mode indicator
+- Core Vim motions and operators with count support (`5j`, `3w`, `2dd`)
+- Editor-specific adapters for Google Docs and Excel for the web
+- Zero-footprint by design: no background service worker, no network requests, no analytics, no storage, no document API access
 
 ## Supported Editors
 
-- Google Docs: `https://docs.google.com/*`
-- Excel for the web: `office.com`, `officeapps.live.com`, and `excel.cloud.microsoft`
+| Editor | Hosts |
+| --- | --- |
+| Google Docs | `docs.google.com` |
+| Excel for the web | `office.com`, `officeapps.live.com`, `excel.cloud.microsoft` |
+
+> Disable other keyboard-navigation extensions on these sites to avoid keybinding conflicts.
 
 ## Keybindings
 
-### Navigation
+### Motions
 
-- `h`, `j`, `k`, `l` - Left, down, up, right
-- `w`, `e` - Move forward one word or cell boundary
-- `b` - Move back one word or cell boundary
-- `f{character}` - Not supported: Google Docs and Excel web do not expose active-line text and cursor positions required for reliable line-local character motion
-- `{`, `}` - Previous/next paragraph or cell region
-- `0`, `^`, `_` - Start of line or active cell range
-- `$` - End of line or active cell range
-- `gg`, `G` - Document or worksheet start/end
-- `{n}` + motion - Repeat a motion, such as `5j`
+| Key | Action |
+| --- | --- |
+| `h` `j` `k` `l` | Left, down, up, right |
+| `w` `e` | Forward one word or cell boundary |
+| `b` | Back one word or cell boundary |
+| `{` `}` | Previous / next paragraph or cell region |
+| `0` `^` `_` | Start of line or active cell range |
+| `$` | End of line or active cell range |
+| `gg` | Document or worksheet start |
+| `G` | Document or worksheet end |
+| `{n}` + motion | Repeat a motion (e.g. `5j`) |
 
 ### Modes
 
-- `i`, `a` - Insert at cursor or after cursor
-- `I`, `A` - Insert at start or end
-- `v`, `V` - Character-wise or line-wise visual selection
-- `Esc` - Return to normal mode
-- `Ctrl+o` - One normal-mode command from insert mode
+| Key | Action |
+| --- | --- |
+| `i` / `a` | Insert at cursor / after cursor |
+| `I` / `A` | Insert at start / end of line |
+| `v` / `V` | Character-wise / line-wise visual selection |
+| `Esc` | Return to normal mode |
+| `Ctrl+o` | Execute one normal-mode command from insert mode |
 
-### Editing
+### Operators and Editing
 
-- `d`, `c`, `y` + motion - Delete/cut, change, or copy through a motion, including `dw`, `db`, `dd`, and `yy`
-- `D`, `Y` - Delete or copy from the cursor to line/range end
-- `p`, `P` - Paste
-- `x` - Delete forward
-- `s` - Delete forward and insert
-- `u`, `r` - Undo and redo
-- `o`, `O` - New line below or above
-- `J` - Join with the next line when supported by the editor
-- `/` - Search the whole document or workbook with native Find
+| Key | Action |
+| --- | --- |
+| `d` + motion | Delete (cut) through a motion, including `dd` |
+| `c` + motion | Change through a motion, entering insert mode |
+| `y` + motion | Yank (copy) through a motion, including `yy` |
+| `D` / `Y` | Delete / yank from cursor to end of line or range |
+| `p` / `P` | Paste |
+| `x` | Delete forward |
+| `s` | Delete forward and insert |
+| `u` / `r` | Undo / redo |
+| `o` / `O` | Open a new line below / above |
+| `J` | Join with the next line, where supported |
+| `/` | Search the document or workbook with the editor's native Find |
+
+### Behavior Notes
+
+- Yank and paste operate on the **system clipboard**; named and numbered registers are not implemented.
+- In Excel, `i` / `a` enters cell-edit mode, and `dd` / `yy` act on the active cell's contents rather than the entire row.
 
 ## Installation
 
 1. Open `chrome://extensions` in Chrome.
 2. Enable **Developer mode**.
 3. Select **Load unpacked**.
-4. Select this extension folder.
-5. Reload any open Docs or Excel web tabs.
+4. Choose this extension folder.
+5. Reload any open Google Docs or Excel for the web tabs.
 
 ## Privacy
 
-MotionGrid has no background service, network requests, analytics, storage, or document API access. It runs only on declared Google Docs and Excel web hosts, observes keyboard events to implement mappings, and dispatches corresponding native editor events locally.
+MotionGrid is designed to be privacy-preserving:
+
+- No background service worker
+- No network requests of any kind
+- No analytics or telemetry
+- No storage of browsing activity or document content
+- No Google Docs or Office document API access
+- Runs only on the declared Docs and Excel hosts above, observing keyboard events to implement mappings and dispatching corresponding native editor events locally
 
 ## Limitations
 
-- Advanced Neovim features such as registers, macros, marks, and custom mappings are not implemented.
-- Google Docs and Excel may change their internal editor behavior, which can affect synthetic keyboard events.
+- Advanced Neovim features — registers, macros, marks, custom mappings, Ex commands (`:`), and line-local character motions such as `f{char}` — are not implemented. Google Docs and Excel for the web do not expose the active-line text and cursor positions required for reliable character-level motion.
+- Google and Microsoft may change their editors' internal behavior, which can affect synthetic keyboard events. If a binding stops working, reload the tab first.
 
 ## License
 
-See [MIT-LICENSE.txt](MIT-LICENSE.txt).
+Released under the MIT License. See [MIT-LICENSE.txt](MIT-LICENSE.txt).
