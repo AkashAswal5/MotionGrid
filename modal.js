@@ -11,6 +11,7 @@
             this.pendingGo = false;
             this.temporaryNormal = false;
             this.insertEscape = null;
+            this.pendingIndent = null;
             this.indicator = this.createIndicator();
             this.render();
         }
@@ -24,7 +25,7 @@
         }
 
         render() {
-            const pending = `${this.count}${this.operation || ""}${this.pendingGo ? "g" : ""}`;
+            const pending = `${this.count}${this.operation || ""}${this.pendingGo ? "g" : ""}${this.pendingIndent || ""}`;
             this.indicator.textContent = `${this.adapter.label} / ${this.mode.toUpperCase()}${pending ? ` ${pending}` : ""}`;
             this.indicator.style.background = this.mode === "insert" ? "#176b52" : this.mode === "visual" ? "#8a5a13" : "#18212b";
         }
@@ -34,6 +35,7 @@
             this.count = "";
             this.operation = "";
             this.pendingGo = false;
+            this.pendingIndent = null;
             this.render();
         }
 
@@ -64,11 +66,21 @@
             return true;
         }
 
+        operateOnLine(operation) {
+            if (this.adapter.lineOperation) {
+                this.adapter.lineOperation(operation);
+                if (operation === "c") this.enterInsert();
+                else this.setMode("normal");
+                return;
+            }
+            this.adapter.selectLine(() => this.runOperation(operation));
+        }
+
         applyOperation(key) {
             const operation = this.operation;
             this.operation = "";
             if (key === operation) {
-                this.adapter.selectLine(() => this.runOperation(operation));
+                this.operateOnLine(operation);
                 return;
             } else if (key === "g") {
                 this.pendingGo = true;
@@ -120,8 +132,14 @@
         }
 
         handleNormal(key) {
-            if (/^[1-9]$/.test(key)) {
+            if ((this.count && key === "0") || /^[1-9]$/.test(key)) {
                 this.count += key;
+                return;
+            }
+            if (this.pendingIndent) {
+                const direction = this.pendingIndent;
+                this.pendingIndent = null;
+                if (key === direction && this.adapter.indent) this.repeat(() => this.adapter.indent(direction === ">"));
                 return;
             }
             if (this.pendingGo) {
@@ -149,24 +167,29 @@
                 case "a": this.enterInsert(true); break;
                 case "I": this.adapter.key("Home"); this.enterInsert(); break;
                 case "A": this.adapter.key("End"); this.enterInsert(); break;
-                case "o": this.adapter.openLine(false); this.setMode("insert"); break;
-                case "O": this.adapter.openLine(true); this.setMode("insert"); break;
+                case "o": this.adapter.openLine(false); this.setMode(this.adapter.rowInsert ? "normal" : "insert"); break;
+                case "O": this.adapter.openLine(true); this.setMode(this.adapter.rowInsert ? "normal" : "insert"); break;
                 case "v": this.setMode("visual"); this.adapter.key("ArrowRight", { shift: true }); break;
                 case "V": this.adapter.selectLine(() => this.setMode("visual")); break;
                 case "d": case "c": case "y": this.operation = key; break;
+                case ">": case "<": if (this.adapter.indent) this.pendingIndent = key; break;
                 case "D":
                     this.adapter.key("End", { shift: true });
                     this.afterSelection(() => this.adapter.deleteSelection());
                     break;
+                case "C":
+                    this.adapter.key("End", { shift: true });
+                    this.afterSelection(() => { this.adapter.command("cut"); this.enterInsert(); });
+                    break;
                 case "R":
                     this.adapter.selectLine(() => this.adapter.deleteSelection());
                     break;
-                case "Y":
-                    this.adapter.selectLine(() => this.adapter.command("copy"));
-                    break;
+                case "S": this.operateOnLine("c"); break;
+                case "Y": this.operateOnLine("y"); break;
+                case "X": this.repeat(() => this.adapter.key("Backspace")); break;
                 case "p": case "P": this.adapter.command("paste"); break;
-                case "x": this.adapter.key("Delete"); break;
-                case "s": this.adapter.key("Delete"); this.enterInsert(); break;
+                case "x": this.repeat(() => this.adapter.key("Delete")); break;
+                case "s": this.repeat(() => this.adapter.key("Delete")); this.enterInsert(); break;
                 case "J": this.adapter.key("End"); this.adapter.key("Delete"); break;
                 case "u": this.adapter.undo(); break;
                 case "r": this.adapter.command("redo"); break;
@@ -179,7 +202,8 @@
         handleVisual(key) {
             if (this.motion(key, true)) return;
             switch (key) {
-                case "d": case "D": this.afterSelection(() => { this.adapter.command("cut"); this.setMode("normal"); }); break;
+                case "d": case "D": case "x": this.afterSelection(() => { this.adapter.command("cut"); this.setMode("normal"); }); break;
+                case "C": this.afterSelection(() => { this.adapter.command("cut"); this.enterInsert(); }); break;
                 case "c": this.afterSelection(() => { this.adapter.command("cut"); this.enterInsert(); }); break;
                 case "y": this.afterSelection(() => { this.adapter.command("copy"); this.setMode("normal"); }); break;
                 case "p": case "P": this.adapter.command("paste"); this.setMode("normal"); break;
@@ -190,7 +214,7 @@
             // Events generated by the page bridge must reach the editor untouched.
             if (!event.isTrusted) return;
             const lower = event.key.toLowerCase();
-            const ctrlAllowed = ["o", "d", "u", "["].includes(lower);
+            const ctrlAllowed = ["o", "d", "u", "[", "r"].includes(lower);
             if (event.defaultPrevented || event.altKey || event.metaKey || (event.ctrlKey && !ctrlAllowed)) return;
             if (event.key === "Escape" || (event.ctrlKey && event.key === "[")) {
                 if (this.mode !== "insert" || event.ctrlKey) event.preventDefault();
@@ -205,6 +229,12 @@
                     this.temporaryNormal = false;
                     this.enterInsert();
                 }
+                return;
+            }
+            if (event.ctrlKey && lower === "r" && this.mode !== "insert") {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                this.adapter.command("redo");
                 return;
             }
             if (this.mode === "insert") {
