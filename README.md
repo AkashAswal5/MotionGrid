@@ -56,6 +56,10 @@ MotionGrid brings familiar modal editing keybindings to browser-based editors by
 | `c` + motion | Change through a motion, entering insert mode |
 | `y` + motion | Yank (copy) through a motion, including `yy` |
 | `D` / `Y` | Delete / yank from cursor to end of line or range |
+| `C` / `S` | Change to end of line / change the whole line |
+| `X` | Delete backward |
+| `Ctrl+r` | Redo |
+| `>>` / `<<` | Indent / outdent the current line (Google Docs only) |
 | `p` / `P` | Paste |
 | `x` | Delete forward |
 | `s` | Delete forward and insert |
@@ -68,7 +72,8 @@ MotionGrid brings familiar modal editing keybindings to browser-based editors by
 ### Behavior Notes
 
 - Yank and paste operate on the **system clipboard**; named and numbered registers are not implemented.
-- In Excel, `i` / `a` enters cell-edit mode, and `dd` / `yy` act on the active cell's contents rather than the entire row.
+- In Excel, `i` / `a` enters cell-edit mode (F2) with the cursor at the end of the cell contents.
+- In Excel, line-wise commands operate on entire rows: `dd` deletes the row, `yy` / `Y` copy it, `cc` / `S` clear its contents, and `o` / `O` insert a blank row below / above and return to normal mode.
 - `n` / `N` reopen the editor's native Find dialog and jump to the next (or previous) match. In Google Docs, `N` may behave like `n` if the dialog does not accept a reversed-direction Enter.
 - The mode indicator shows any pending sequence — counts, operators, and `g` — so an in-progress command such as `3dg` is always visible.
 
