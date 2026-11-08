@@ -38,14 +38,31 @@
             const shortcut = { copy: "c", cut: "x", paste: "v", undo: "z", redo: "y", find: "f" }[name];
             if (shortcut) key(shortcut, { [primary]: true });
         },
-        insert(after) {
-            if (after) key("End");
+        insert() {
             key("F2");
         },
         openLine(above) {
-            key("End");
-            key("Enter", { shiftKey: above });
+            const insertRow = () => key("+", { [primary]: true, shiftKey: true });
+            if (above) {
+                key(" ", { shiftKey: true });
+                window.setTimeout(insertRow, 100);
+            } else {
+                key("ArrowDown");
+                window.setTimeout(() => {
+                    key(" ", { shiftKey: true });
+                    window.setTimeout(insertRow, 100);
+                }, 100);
+            }
         },
+        lineOperation(operation) {
+            key(" ", { shiftKey: true });
+            window.setTimeout(() => {
+                if (operation === "d") key("-", { [primary]: true });
+                else if (operation === "y") key("c", { [primary]: true });
+                else if (operation === "c") key("Delete");
+            }, 100);
+        },
+        rowInsert: true,
     });
     document.addEventListener("keydown", (event) => controller.handle(event), true);
 })();
