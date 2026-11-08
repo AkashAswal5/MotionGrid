@@ -35,6 +35,10 @@
         key("z", isMac ? { meta: true } : { control: true });
     }
 
+    function indent(right) {
+        key(right ? "]" : "[", isMac ? { meta: true } : { control: true });
+    }
+
     function command(name) {
         const caption = menuItems[name];
         const editMenu = [...document.querySelectorAll(".menu-button")].find((element) => element.innerText.trim() === "Edit");
@@ -68,6 +72,7 @@
             wordForward,
             wordBackward,
             undo,
+            indent,
             findNext,
             afterSelection,
             selectLine,
